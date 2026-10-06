@@ -31,6 +31,26 @@ def get_git_status():
 
 
 def get_git_diff():
-    return run_git_command(
+    unstaged_diff = run_git_command(
         ["diff"]
     )
+
+    staged_diff = run_git_command(
+        ["diff", "--cached"]
+    )
+
+    diffs = []
+
+    if staged_diff:
+        diffs.append(
+            "=== Staged Changes ===\n"
+            + staged_diff
+        )
+
+    if unstaged_diff:
+        diffs.append(
+            "=== Unstaged Changes ===\n"
+            + unstaged_diff
+        )
+
+    return "\n\n".join(diffs)
